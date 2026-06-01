@@ -29,6 +29,16 @@ export default function RSVPForm() {
     setLoading(false);
     if (success) {
       setSubmitted(true);
+      // Dispatch custom event to notify Wishes component to prepend/reload
+      window.dispatchEvent(new CustomEvent("rsvpsubmitted", {
+        detail: {
+          name: formData.name,
+          whatsapp: formData.whatsapp,
+          guests: formData.guests,
+          status: formData.status,
+          message: formData.message
+        }
+      }));
       setFormData({ name: "", whatsapp: "", guests: 1, status: "hadir", message: "" });
     } else {
       setError(true);

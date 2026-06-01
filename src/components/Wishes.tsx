@@ -16,13 +16,37 @@ export default function Wishes() {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const loadWishes = async () => {
+    const data = await fetchWishes();
+    setWishes(data as Wish[]);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const loadWishes = async () => {
-      const data = await fetchWishes();
-      setWishes(data as Wish[]);
-      setLoading(false);
-    };
     loadWishes();
+
+    const handleNewRSVP = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const newWish = customEvent.detail;
+      
+      // Tampilkan ucapan langsung jika isi ucapan tidak kosong
+      if (newWish && newWish.message && newWish.message.trim() !== '') {
+        const wishItem: Wish = {
+          name: newWish.name,
+          message: newWish.message,
+          createdAt: new Date().toISOString()
+        };
+        setWishes(prev => [wishItem, ...prev]);
+      }
+      
+      // Tetap tarik ulang data dari sheets di background untuk memastikan sinkronisasi
+      loadWishes();
+    };
+
+    window.addEventListener("rsvpsubmitted", handleNewRSVP);
+    return () => {
+      window.removeEventListener("rsvpsubmitted", handleNewRSVP);
+    };
   }, []);
 
   return (
