@@ -107,7 +107,7 @@ export default function Footer() {
           </div>
 
           <p className="mt-12 font-elegant text-[9px] text-[#8B735B] uppercase tracking-[0.3em]">
-            © {new Date().getFullYear()} Digital Wedding Invitation
+            © {new Date().getFullYear()} Digital Wedding Invitation by fianWR
           </p>
         </motion.div>
       </div>
